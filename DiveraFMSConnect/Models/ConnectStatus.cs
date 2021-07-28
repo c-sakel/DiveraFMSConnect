@@ -1,5 +1,9 @@
-﻿// Copyright (c) Moritz Jökel. All Rights Reserved.
-// Licensed under Creative Commons Zero v1.0 Universal
+﻿//-----------------------------------------------------------------------
+// <copyright file="ConnectStatus.cs" company="Moritz Jökel">
+//     Copyright (c) Moritz Jökel. All Rights Reserved.
+//     Licensed under Creative Commons Zero v1.0 Universal
+// </copyright>
+//-----------------------------------------------------------------------
 
 namespace DiveraFMSConnect.Models
 {
@@ -8,12 +12,12 @@ namespace DiveraFMSConnect.Models
     /// <summary>
     /// Repräsentiert ein Fahrzeugstatus, wie er in Feuersoftware Connect dargestellt wird.
     /// </summary>
-    class ConnectStatus
+    public class ConnectStatus
     {
         /// <summary>
-        /// Konstruktor für den Fahrzeugstatus für Feuersoftware Connect.
+        /// Initialisiert eine neue Instanz der <see cref="ConnectStatus"/> Klasse.
         /// </summary>
-        /// <param name="diveraStatus">Der Fahrzeugstatus aus Divera 24/7</param>
+        /// <param name="diveraStatus">Der Fahrzeugstatus aus Divera.</param>
         public ConnectStatus(DiveraStatus diveraStatus)
         {
             this.Status = diveraStatus.Status;
@@ -24,22 +28,22 @@ namespace DiveraFMSConnect.Models
         }
 
         /// <summary>
-        /// Der Status des Fahrzeugs
+        /// Holt oder setzt den Status des Fahrzeugs.
         /// </summary>
         public int Status { get; set; }
 
         /// <summary>
-        /// Dis Geo-Position des Fahrzeugs
+        /// Holt oder setzt dis Geo-Position des Fahrzeugs.
         /// </summary>
         public Position Position { get; set; }
 
         /// <summary>
-        /// Der Zeitstempel des Status
+        /// Holt oder setzt den Zeitstempel des Status.
         /// </summary>
         public DateTime StatusTimestamp { get; set; }
 
         /// <summary>
-        /// Der Zeitstempel der Geo-Position
+        /// Holt oder setzt den Zeitstempel der Geo-Position.
         /// </summary>
         public DateTime PositionTimestamp { get; set; }
     }

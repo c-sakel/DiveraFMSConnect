@@ -1,5 +1,9 @@
-﻿// Copyright (c) Moritz Jökel. All Rights Reserved.
-// Licensed under Creative Commons Zero v1.0 Universal
+﻿//-----------------------------------------------------------------------
+// <copyright file="ConfigurationProvider.cs" company="Moritz Jökel">
+//     Copyright (c) Moritz Jökel. All Rights Reserved.
+//     Licensed under Creative Commons Zero v1.0 Universal
+// </copyright>
+//-----------------------------------------------------------------------
 
 namespace DiveraFMSConnect.Configuration
 {
@@ -13,6 +17,10 @@ namespace DiveraFMSConnect.Configuration
     /// </summary>
     public static class ConfigurationProvider
     {
+        /// <summary>
+        /// Ermittelt das Timer-Intervall aus der Konfiguration.
+        /// </summary>
+        /// <returns>Das Timer-Intervall in Millisekunden.</returns>
         public static int GetTimerInterval()
         {
             var timerInterval = int.Parse(ConfigurationManager.AppSettings.Get("TimerInterval"));
@@ -25,6 +33,10 @@ namespace DiveraFMSConnect.Configuration
             return timerInterval;
         }
 
+        /// <summary>
+        /// Ermittelt die IDs der Fahrzeuge aus Divera.
+        /// </summary>
+        /// <returns>Die Divera-Fahrzeug-IDs.</returns>
         public static IEnumerable<string> GetDiveraVehicleIds()
         {
             var diveraVehicleIds = ConfigurationManager.AppSettings.Get("DiveraVehicleIds").Split(',');
@@ -33,7 +45,7 @@ namespace DiveraFMSConnect.Configuration
             {
                 throw new ConfigurationErrorsException($"Der Konfigurationswert für die DiveraVehicleIds darf nicht leer sein.");
             }
-            else if (diveraVehicleIds.Length != ConfigurationProvider.GetDiveraVehicleIdsCount())
+            else if (diveraVehicleIds.Length != ConfigurationProvider.GetConnectVehicleIdsCount())
             {
                 throw new ConfigurationErrorsException($"Die Anzahl der DiveraVehicleIds darf nicht von der Anzahl der ConnectVehicleIds abweichen. Anzahl DiveraVehicleIds: '{diveraVehicleIds.Length}', Anzahl ConnectVehicleIds: '{ConfigurationProvider.GetDiveraVehicleIdsCount()}'.");
             }
@@ -41,6 +53,10 @@ namespace DiveraFMSConnect.Configuration
             return diveraVehicleIds;
         }
 
+        /// <summary>
+        /// Ermittelt die IDs der Fahrzeuge aus Connect.
+        /// </summary>
+        /// <returns>Die Connect-Fahrzeug-IDs.</returns>
         public static IEnumerable<string> GetConnectVehicleIds()
         {
             var connectVehicleIds = ConfigurationManager.AppSettings.Get("ConnectVehicleIds").Split(',');
@@ -57,6 +73,10 @@ namespace DiveraFMSConnect.Configuration
             return connectVehicleIds;
         }
 
+        /// <summary>
+        /// Ermittelt den API-Key für Divera aus der Konfiguration.
+        /// </summary>
+        /// <returns>Den-API-Key für Divera.</returns>
         public static string GetDiveraApiKey()
         {
             var diveraApiKey = ConfigurationManager.AppSettings.Get("DiveraApiKey");
@@ -69,6 +89,10 @@ namespace DiveraFMSConnect.Configuration
             return diveraApiKey;
         }
 
+        /// <summary>
+        /// Ermittelt den API-Key für Connect aus der Konfiguration.
+        /// </summary>
+        /// <returns>Den-API-Key für Connect.</returns>
         public static string GetConnectApiKey()
         {
             var connectApikey = ConfigurationManager.AppSettings.Get("ConnectApiKey");
@@ -81,6 +105,10 @@ namespace DiveraFMSConnect.Configuration
             return connectApikey;
         }
 
+        /// <summary>
+        /// Ermittelt die Basisadresse für Connect aus der Konfiguration.
+        /// </summary>
+        /// <returns>Die Basisadresse für die Connect-API.</returns>
         public static string GetConnectBaseAddress()
         {
             var connectBaseAddress = ConfigurationManager.AppSettings.Get("ConnectBaseAddress");
@@ -93,6 +121,10 @@ namespace DiveraFMSConnect.Configuration
             return connectBaseAddress;
         }
 
+        /// <summary>
+        /// Ermittelt die Basisadresse für Divera aus der Konfiguration.
+        /// </summary>
+        /// <returns>Die Basisadresse für die Divera-API.</returns>
         public static string GetDiveraBaseAddress()
         {
             var diveraBaseAddress = ConfigurationManager.AppSettings.Get("DiveraBaseAddress");

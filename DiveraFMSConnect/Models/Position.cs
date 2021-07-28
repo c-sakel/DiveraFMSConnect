@@ -1,26 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿//-----------------------------------------------------------------------
+// <copyright file="Position.cs" company="Moritz Jökel">
+//     Copyright (c) Moritz Jökel. All Rights Reserved.
+//     Licensed under Creative Commons Zero v1.0 Universal
+// </copyright>
+//-----------------------------------------------------------------------
 
 namespace DiveraFMSConnect.Models
 {
-    class Position
+    /// <summary>
+    /// Repräsentiert eine Geo-Position eines Fahrzeugs für Connect.
+    /// </summary>
+    public class Position
     {
-        public Position(decimal lat, decimal lng)
+        /// <summary>
+        /// Initialisiert eine neue Instanz der <see cref="Position"/> Klasse.
+        /// </summary>
+        /// <param name="latitude">Der Breitengrad.</param>
+        /// <param name="longitude">Der Längengrad.</param>
+        public Position(decimal latitude, decimal longitude)
         {
-            this.Latitude = lat;
-            this.Longitude = lng;
+            this.Latitude = latitude;
+            this.Longitude = longitude;
         }
 
         /// <summary>
-        /// Der Breitengrad
+        /// Holt oder setzt den Breitengrad.
         /// </summary>
         public decimal Latitude { get; set; }
 
         /// <summary>
-        /// Der Längengrad
+        /// Holt oder setzt den Längengrad.
         /// </summary>
         public decimal Longitude { get; set; }
     }

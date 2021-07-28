@@ -1,4 +1,6 @@
-﻿
+﻿// Copyright (c) Moritz Jökel. All Rights Reserved.
+// Licensed under Creative Commons Zero v1.0 Universal
+
 namespace DiveraFMSConnect
 {
     partial class ProjectInstaller
@@ -45,14 +47,12 @@ namespace DiveraFMSConnect
             this.diveraFMSConnectInstaller.DisplayName = "DiveraFMSConnect";
             this.diveraFMSConnectInstaller.ServiceName = "DiveraFMSConnect";
             this.diveraFMSConnectInstaller.StartType = System.ServiceProcess.ServiceStartMode.Automatic;
-            this.diveraFMSConnectInstaller.AfterInstall += new System.Configuration.Install.InstallEventHandler(this.diveraFMSConnectInstaller_AfterInstall);
             // 
             // ProjectInstaller
             // 
             this.Installers.AddRange(new System.Configuration.Install.Installer[] {
             this.serviceProcessInstaller,
             this.diveraFMSConnectInstaller});
-
         }
 
         #endregion

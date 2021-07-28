@@ -1,35 +1,47 @@
-﻿// Copyright (c) Moritz Jökel. All Rights Reserved.
-// Licensed under Creative Commons Zero v1.0 Universal
+﻿//-----------------------------------------------------------------------
+// <copyright file="DiveraFMSConnect.cs" company="Moritz Jökel">
+//     Copyright (c) Moritz Jökel. All Rights Reserved.
+//     Licensed under Creative Commons Zero v1.0 Universal
+// </copyright>
+//-----------------------------------------------------------------------
 
 namespace DiveraFMSConnect
 {
-    using Configuration;
-    using Services;
     using System;
     using System.Diagnostics;
     using System.ServiceProcess;
     using System.Timers;
+    using global::DiveraFMSConnect.Configuration;
+    using global::DiveraFMSConnect.Services;
 
+    /// <summary>
+    /// Der Haupt-Service der Anwendung.
+    /// </summary>
     public partial class DiveraFMSConnect : ServiceBase
     {
         private readonly EventLog logger;
         private readonly FmsService service;
         private readonly Timer timer;
 
+        /// <summary>
+        /// Initialisiert eine neue Instanz der <see cref="DiveraFMSConnect"/> Klasse.
+        /// </summary>
         public DiveraFMSConnect()
         {
-            InitializeComponent();
-            this.logger = new EventLog();
-            this.logger.Source = "DiveraFMSConnect";
+            this.InitializeComponent();
+            this.logger = new EventLog
+            {
+                Source = "DiveraFMSConnect",
+            };
 
             try
-            {            
+            {
                 this.service = new FmsService(
                 ConfigurationProvider.GetConnectBaseAddress(),
                 ConfigurationProvider.GetConnectApiKey(),
                 ConfigurationProvider.GetDiveraBaseAddress(),
                 ConfigurationProvider.GetDiveraApiKey(),
-                ConfigurationProvider.GetDiveraVehicleIds(), 
+                ConfigurationProvider.GetDiveraVehicleIds(),
                 ConfigurationProvider.GetConnectVehicleIds(),
                 this.logger);
             }
@@ -41,9 +53,10 @@ namespace DiveraFMSConnect
 
             this.timer = new Timer(ConfigurationProvider.GetTimerInterval());
             this.timer.Elapsed += this.OnElapsedTime;
-            this.timer.AutoReset = true;            
+            this.timer.AutoReset = true;
         }
 
+        /// <inheritdoc/>
         protected override void OnStart(string[] args)
         {
             this.logger.WriteEntry("DiveraFMSConnect gestartet.", EventLogEntryType.Information);
@@ -51,6 +64,7 @@ namespace DiveraFMSConnect
             this.timer.Start();
         }
 
+        /// <inheritdoc/>
         protected override void OnStop()
         {
             this.timer.Stop();
@@ -58,11 +72,11 @@ namespace DiveraFMSConnect
         }
 
         /// <summary>
-        /// Handler zum Synchronisieren
+        /// Handler zum Synchronisieren.
         /// </summary>
-        /// <param name="source"></param>
-        /// <param name="e"></param>
-        private void OnElapsedTime(Object source, ElapsedEventArgs e)
+        /// <param name="source">Die Quelle des Events.</param>
+        /// <param name="e">Die Argumente zum Event.</param>
+        private void OnElapsedTime(object source, ElapsedEventArgs e)
         {
             this.service.Sync();
         }

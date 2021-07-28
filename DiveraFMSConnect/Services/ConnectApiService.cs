@@ -1,30 +1,34 @@
-﻿// Copyright (c) Moritz Jökel. All Rights Reserved.
-// Licensed under Creative Commons Zero v1.0 Universal
+﻿//-----------------------------------------------------------------------
+// <copyright file="ConnectApiService.cs" company="Moritz Jökel">
+//     Copyright (c) Moritz Jökel. All Rights Reserved.
+//     Licensed under Creative Commons Zero v1.0 Universal
+// </copyright>
+//-----------------------------------------------------------------------
 
 namespace DiveraFMSConnect.Services
 {
-    using Models;
     using System;
     using System.Net.Http;
     using System.Net.Http.Headers;
-    using System.Threading.Tasks;
-    using Newtonsoft.Json;
     using System.Text;
+    using System.Threading.Tasks;
+    using global::DiveraFMSConnect.Models;
+    using Newtonsoft.Json;
 
     /// <summary>
     /// Serviceklasse für die Verbindung mit der öffentlichen Connect-Schnittstelle.
     /// </summary>
-    class ConnectApiService
+    public class ConnectApiService
     {
         private readonly HttpClient client = new HttpClient();
         private readonly string baseAddress;
         private readonly string apikey;
 
         /// <summary>
-        /// Konstruktor für den Service zur Verbindung zur öffentlichen Connect-Schnittstelle.
+        /// Initialisiert eine neue Instanz der <see cref="ConnectApiService"/> Klasse.
         /// </summary>
-        /// <param name="baseAddress">Die Basisadresse der API</param>
-        /// <param name="apikey">Der Zugriffsschlüssel zur API</param>
+        /// <param name="baseAddress">Die Basisadresse der API.</param>
+        /// <param name="apikey">Der Zugriffsschlüssel zur API.</param>
         public ConnectApiService(string baseAddress, string apikey)
         {
             this.baseAddress = baseAddress;
@@ -40,9 +44,9 @@ namespace DiveraFMSConnect.Services
         /// <summary>
         /// Sendet einen Fahrzeugstatus an die API.
         /// </summary>
-        /// <param name="id">Die ID des Fahrzeugs, zu dem der Status gehört</param>
-        /// <param name="status">Der Fahrzeugstatus</param>
-        /// <returns></returns>
+        /// <param name="id">Die ID des Fahrzeugs, zu dem der Status gehört.</param>
+        /// <param name="status">Der Fahrzeugstatus.</param>
+        /// <returns>Nichts.</returns>
         public async Task PostVehicleStatusById(string id, ConnectStatus status)
         {
             if (status == null)
@@ -52,10 +56,10 @@ namespace DiveraFMSConnect.Services
 
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"interfaces/public/vehicle/{id}/status")
             {
-                Content = new StringContent(JsonConvert.SerializeObject(status), Encoding.UTF8, "application/json")
+                Content = new StringContent(JsonConvert.SerializeObject(status), Encoding.UTF8, "application/json"),
             };
 
-            var response = await client.SendAsync(request);
+            var response = await this.client.SendAsync(request);
 
             if (!response.IsSuccessStatusCode)
             {
