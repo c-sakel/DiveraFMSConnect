@@ -20,7 +20,7 @@ namespace DiveraFMSConnect
     public partial class DiveraFMSConnect : ServiceBase
     {
         private readonly EventLog logger;
-        private readonly FmsService service;
+        private readonly FmsService fmsService;
         private readonly Timer timer;
 
         /// <summary>
@@ -36,14 +36,19 @@ namespace DiveraFMSConnect
 
             try
             {
-                this.service = new FmsService(
-                ConfigurationProvider.GetConnectBaseAddress(),
-                ConfigurationProvider.GetConnectApiKey(),
-                ConfigurationProvider.GetDiveraBaseAddress(),
-                ConfigurationProvider.GetDiveraApiKey(),
-                ConfigurationProvider.GetDiveraVehicleIds(),
-                ConfigurationProvider.GetConnectVehicleIds(),
-                this.logger);
+                var connectApiService = new ConnectApiService(
+                    ConfigurationProvider.GetConnectBaseAddress(),
+                    ConfigurationProvider.GetConnectApiKey());
+                var diveraApiService = new DiveraApiService(
+                    ConfigurationProvider.GetDiveraBaseAddress(),
+                    ConfigurationProvider.GetDiveraApiKey());
+
+                this.fmsService = new FmsService(
+                    connectApiService,
+                    diveraApiService,
+                    ConfigurationProvider.GetDiveraVehicleIds(),
+                    ConfigurationProvider.GetConnectVehicleIds(),
+                    this.logger);
             }
             catch (Exception exception)
             {
@@ -60,7 +65,7 @@ namespace DiveraFMSConnect
         protected override void OnStart(string[] args)
         {
             this.logger.WriteEntry("DiveraFMSConnect gestartet.", EventLogEntryType.Information);
-            this.service.InitialSync();
+            this.fmsService.InitialSync();
             this.timer.Start();
         }
 
@@ -78,7 +83,7 @@ namespace DiveraFMSConnect
         /// <param name="e">Die Argumente zum Event.</param>
         private void OnElapsedTime(object source, ElapsedEventArgs e)
         {
-            this.service.Sync();
+            this.fmsService.Sync();
         }
     }
 }

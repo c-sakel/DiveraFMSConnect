@@ -23,7 +23,7 @@ namespace DiveraFMSConnect.Services
         private readonly DiveraApiService diveraApiService;
         private readonly Dictionary<string, string> vehicleIds;
         private readonly EventLog logger;
-        private readonly ConcurrentDictionary<string, int> cachedStatuses;
+        private readonly Dictionary<string, int> cachedStatuses;
 
         /// <summary>
         /// Initialisiert eine neue Instanz der <see cref="FmsService"/> Klasse.
@@ -36,34 +36,12 @@ namespace DiveraFMSConnect.Services
         /// <param name="connectIds">Die Fahrzeug-IDs für Connect.</param>
         /// <param name="logger">Der Logger für das EventLog.</param>
         public FmsService(
-            string connectBaseAddress,
-            string connectApiKey,
-            string diveraBaseAddress,
-            string diveraApiKey,
+            ConnectApiService connectApiService,
+            DiveraApiService diveraApiService,
             IEnumerable<string> diveraIds,
             IEnumerable<string> connectIds,
             EventLog logger)
         {
-            if (string.IsNullOrEmpty(connectBaseAddress))
-            {
-                throw new ArgumentException($"\"{nameof(connectBaseAddress)}\" kann nicht NULL oder leer sein.", nameof(connectBaseAddress));
-            }
-
-            if (string.IsNullOrEmpty(connectApiKey))
-            {
-                throw new ArgumentException($"\"{nameof(connectApiKey)}\" kann nicht NULL oder leer sein.", nameof(connectApiKey));
-            }
-
-            if (string.IsNullOrEmpty(diveraBaseAddress))
-            {
-                throw new ArgumentException($"\"{nameof(diveraBaseAddress)}\" kann nicht NULL oder leer sein.", nameof(diveraBaseAddress));
-            }
-
-            if (string.IsNullOrEmpty(diveraApiKey))
-            {
-                throw new ArgumentException($"\"{nameof(diveraApiKey)}\" kann nicht NULL oder leer sein.", nameof(diveraApiKey));
-            }
-
             if (diveraIds is null || !diveraIds.Any())
             {
                 throw new ArgumentNullException(nameof(diveraIds));
@@ -76,9 +54,9 @@ namespace DiveraFMSConnect.Services
 
             this.vehicleIds = diveraIds.Zip(connectIds, (key, value) => new { key, value }).ToDictionary(dic => dic.key, dic => dic.value);
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            this.connectApiService = new ConnectApiService(connectBaseAddress, connectApiKey);
-            this.diveraApiService = new DiveraApiService(diveraBaseAddress, diveraApiKey);
-            this.cachedStatuses = new ConcurrentDictionary<string, int>();
+            this.connectApiService = connectApiService ?? throw new ArgumentNullException(nameof(connectApiService));
+            this.diveraApiService = diveraApiService ?? throw new ArgumentNullException(nameof(diveraApiService));
+            this.cachedStatuses = new Dictionary<string, int>();
         }
 
         /// <summary>
@@ -95,7 +73,7 @@ namespace DiveraFMSConnect.Services
                     this.logger.WriteEntry($"Initialer Sync für Fahrzeug mit der Divera-ID '{vehicle.Key}' gestartet.", EventLogEntryType.Information);
                     var diveraStatus = await this.diveraApiService.GetVehicleStatusById(vehicle.Key);
 
-                    this.cachedStatuses.TryAdd(vehicle.Key, diveraStatus.Status);
+                    this.cachedStatuses.Add(vehicle.Key, diveraStatus.Status);
 
                     var convertedStatus = this.ConvertDiveraToConnect(diveraStatus);
 
@@ -122,17 +100,17 @@ namespace DiveraFMSConnect.Services
                 {
                     this.logger.WriteEntry($"Synchronisation für Fahrzeug mit der Divera-ID '{vehicle.Key}' gestartet.", EventLogEntryType.Information);
                     var diveraStatus = await this.diveraApiService.GetVehicleStatusById(vehicle.Key);
-
-                    this.cachedStatuses.TryGetValue(vehicle.Key, out var cachedStatus);
+                    var cachedStatus = this.cachedStatuses[vehicle.Key];
 
                     if (cachedStatus == diveraStatus.Status)
                     {
                         this.logger.WriteEntry($"Fahrzeug mit Divera-ID '{vehicle.Key}' nicht aktualisiert. Fahrzeug befand sich bereits vorher im Status '{cachedStatus}'.", EventLogEntryType.Information);
+                        this.logger.WriteEntry($"Gecachte Fahrzeugstatus sind: \n {string.Join(Environment.NewLine, this.cachedStatuses.Select(a => $"{a.Key}: {a.Value}"))}", EventLogEntryType.Information);
                         this.logger.WriteEntry($"Synchronisation für Fahrzeug mit der Divera-ID '{vehicle.Key}' abgeschlossen.", EventLogEntryType.Information);
                         continue;
                     }
 
-                    this.cachedStatuses.TryUpdate(vehicle.Key, diveraStatus.Status, diveraStatus.Status);
+                    this.cachedStatuses[vehicle.Key] = diveraStatus.Status;
                     var convertedStatus = this.ConvertDiveraToConnect(diveraStatus);
 
                     await this.connectApiService.PostVehicleStatusById(vehicle.Value, convertedStatus);

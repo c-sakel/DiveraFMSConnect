@@ -31,6 +31,16 @@ namespace DiveraFMSConnect.Services
         /// <param name="apikey">Der Zugriffsschlüssel zur API.</param>
         public ConnectApiService(string baseAddress, string apikey)
         {
+            if (string.IsNullOrWhiteSpace(baseAddress))
+            {
+                throw new ArgumentException($"\"{nameof(baseAddress)}\" darf nicht NULL oder ein Leerraumzeichen sein.", nameof(baseAddress));
+            }
+
+            if (string.IsNullOrWhiteSpace(apikey))
+            {
+                throw new ArgumentException($"\"{nameof(apikey)}\" darf nicht NULL oder ein Leerraumzeichen sein.", nameof(apikey));
+            }
+
             this.baseAddress = baseAddress;
             this.apikey = apikey;
 

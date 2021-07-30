@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.31410.357
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiveraFMSConnect", "DiveraFMSConnect\DiveraFMSConnect.csproj", "{309A0602-6CA2-4247-B239-793DE6500519}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "DiveraFMSConnectSetupWizard", "DiveraFMSConnectSetupWizard\DiveraFMSConnectSetupWizard.vdproj", "{D7769722-775D-4C10-902A-47B55265E714}"
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "DiveraFMSConnect.SetupWizard", "DiveraFMSConnectSetupWizard\DiveraFMSConnectSetupWizard.vdproj", "{D7769722-775D-4C10-902A-47B55265E714}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
