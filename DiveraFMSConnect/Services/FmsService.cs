@@ -28,13 +28,11 @@ namespace DiveraFMSConnect.Services
         /// <summary>
         /// Initialisiert eine neue Instanz der <see cref="FmsService"/> Klasse.
         /// </summary>
-        /// <param name="connectBaseAddress">Die Basisadresse für die Connect-API.</param>
-        /// <param name="connectApiKey">Der Zugriffsschlüssel für die Connect-API.</param>
-        /// <param name="diveraBaseAddress">Die Basisadresse für die Divera-API.</param>
-        /// <param name="diveraApiKey">Der Zugriffsschlüssel für die Divera-API.</param>
-        /// <param name="diveraIds">Die Fahrzeug-IDs für Divera.</param>
-        /// <param name="connectIds">Die Fahrzeug-IDs für Connect.</param>
-        /// <param name="logger">Der Logger für das EventLog.</param>
+        /// <param name="connectApiService">Der Service für die Kommunikation mit Connect.</param>
+        /// <param name="diveraApiService">Der Service für die Kommunikation mit Divera 24/7.</param>
+        /// <param name="diveraIds">Die Fahrzeug-IDs aus Divera.</param>
+        /// <param name="connectIds">Die Fahrzeug-IDs aus Connect.</param>
+        /// <param name="logger">Das EventLog.</param>
         public FmsService(
             ConnectApiService connectApiService,
             DiveraApiService diveraApiService,

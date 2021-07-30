@@ -1,6 +1,12 @@
-﻿using System.Resources;
+﻿//-----------------------------------------------------------------------
+// <copyright file="AssemblyInfo.cs" company="Moritz Jökel">
+//     Copyright (c) Moritz Jökel. All Rights Reserved.
+//     Licensed under Creative Commons Zero v1.0 Universal
+// </copyright>
+//-----------------------------------------------------------------------
+
 using System.Reflection;
-using System.Runtime.CompilerServices;
+using System.Resources;
 using System.Runtime.InteropServices;
 
 // Allgemeine Informationen über eine Assembly werden über die folgenden
