@@ -108,8 +108,6 @@ class FmsService:
         for d_id, c_id in self.vehicle_map.items():
             try:
                 divera_status = self.divera_service.get_vehicle_status_by_id(d_id)
-                if self.cached_status.get(d_id) == divera_status['status']:
-                    continue
                 self.cached_status[d_id] = divera_status['status']
                 converted = self._convert_status(divera_status)
                 self.connect_service.post_vehicle_status_by_id(c_id, converted)
