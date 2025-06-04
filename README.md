@@ -24,3 +24,25 @@ sudo apt install python3 python3-pip
    ```
 
 The script performs an initial synchronisation and then periodically syncs the status of all configured vehicles. The interval must not be less than 30 seconds.
+
+## Running as a systemd service
+
+To run the script automatically at boot you can use a systemd service. A sample
+unit file `diverafmsconnect.service` is included in this repository.
+
+1. Copy the file to `/etc/systemd/system/`:
+   ```bash
+   sudo cp diverafmsconnect.service /etc/systemd/system/
+   ```
+2. Adjust the paths inside the service file if you placed the repository
+   elsewhere. By default it expects the code in `/opt/diverafmsconnect` and runs
+   `python3` on the `diverafmsconnect.py` script.
+3. Reload systemd and enable the service so it starts on boot:
+   ```bash
+   sudo systemctl daemon-reload
+   sudo systemctl enable --now diverafmsconnect.service
+   ```
+4. Check the status with:
+   ```bash
+   sudo systemctl status diverafmsconnect.service
+   ```
