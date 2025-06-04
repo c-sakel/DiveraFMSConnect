@@ -91,6 +91,7 @@ class FmsService:
         self.divera_service = divera_service
         self.logger = logger
         self.cached_status: Dict[str, int] = {}
+        self.cached_coords: Dict[str, tuple] = {}
 
     def initial_sync(self) -> None:
         self.logger.info("Initial sync started")
@@ -98,6 +99,7 @@ class FmsService:
             try:
                 divera_status = self.divera_service.get_vehicle_status_by_id(d_id)
                 self.cached_status[d_id] = divera_status['status']
+                self.cached_coords[d_id] = (divera_status['lat'], divera_status['lng'])
                 converted = self._convert_status(divera_status)
                 self.connect_service.post_vehicle_status_by_id(c_id, converted)
                 self.logger.info("Initial sync for %s finished", d_id)
@@ -108,7 +110,9 @@ class FmsService:
         for d_id, c_id in self.vehicle_map.items():
             try:
                 divera_status = self.divera_service.get_vehicle_status_by_id(d_id)
+
                 self.cached_status[d_id] = divera_status['status']
+                self.cached_coords[d_id] = coords
                 converted = self._convert_status(divera_status)
                 self.connect_service.post_vehicle_status_by_id(c_id, converted)
                 self.logger.info("Synced vehicle %s", d_id)

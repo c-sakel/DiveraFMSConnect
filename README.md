@@ -25,6 +25,7 @@ sudo apt install python3 python3-pip
 
 The script performs an initial synchronisation and then periodically syncs the status of all configured vehicles. The interval must not be less than 30 seconds.
 
+
 ## Running as a systemd service
 
 To run the script automatically at boot you can use a systemd service. A sample
