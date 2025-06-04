@@ -1,7 +1,15 @@
 # DiveraFMSConnect Python Version
 
 This repository originally contained a Windows service written in C# for synchronising vehicle status data between Divera 24/7 and Feuersoftware Connect.  
-This Python script provides the same functionality so that it can easily run on Linux systems.
+This Python script provides the same functionality so that it can easily run on Linux systems. The Windows-specific project files have been removed so that only the Python implementation remains.
+
+
+## Installing Python and pip on Debian/Ubuntu
+If Python 3 and pip are not yet installed you can install them with:
+```bash
+sudo apt update
+sudo apt install python3 python3-pip
+```
 
 ## Usage
 
