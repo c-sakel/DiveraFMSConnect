@@ -1,0 +1,12 @@
+[Unit]
+Description=Divera FMS Connect sync service
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/diverafmsconnect
+ExecStart=/usr/bin/python3 /opt/diverafmsconnect/diverafmsconnect.py
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

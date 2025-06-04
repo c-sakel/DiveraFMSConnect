@@ -49,9 +49,13 @@ class ConnectApiService:
         }
         response = self.session.post(url, json=payload)
         if not response.ok:
+            try:
+                detail = response.json()
+            except ValueError:
+                detail = response.text
             raise RuntimeError(
                 f"Error sending status for vehicle {vehicle_id}. "
-                f"Status code {response.status_code}"
+                f"Status code {response.status_code}: {detail}"
             )
 
 
