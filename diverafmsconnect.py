@@ -110,11 +110,7 @@ class FmsService:
         for d_id, c_id in self.vehicle_map.items():
             try:
                 divera_status = self.divera_service.get_vehicle_status_by_id(d_id)
-                coords = (divera_status['lat'], divera_status['lng'])
-                if self.cached_coords.get(d_id) == coords:
-                    self.logger.info("No position change for %s", d_id)
-                    self.cached_status[d_id] = divera_status['status']
-                    continue
+
                 self.cached_status[d_id] = divera_status['status']
                 self.cached_coords[d_id] = coords
                 converted = self._convert_status(divera_status)
