@@ -9,7 +9,7 @@ import datetime
 import logging
 import time
 from dataclasses import dataclass
-from typing import Dict, List
+from typing import Dict, List, Tuple
 import requests
 
 
@@ -110,8 +110,16 @@ class FmsService:
         for d_id, c_id in self.vehicle_map.items():
             try:
                 divera_status = self.divera_service.get_vehicle_status_by_id(d_id)
+                status = divera_status['status']
+                coords: Tuple[float, float] = (divera_status['lat'], divera_status['lng'])
 
-                self.cached_status[d_id] = divera_status['status']
+                if (
+                    self.cached_status.get(d_id) == status
+                    and self.cached_coords.get(d_id) == coords
+                ):
+                    continue
+
+                self.cached_status[d_id] = status
                 self.cached_coords[d_id] = coords
                 converted = self._convert_status(divera_status)
                 self.connect_service.post_vehicle_status_by_id(c_id, converted)
