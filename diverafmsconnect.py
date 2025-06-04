@@ -49,9 +49,13 @@ class ConnectApiService:
         }
         response = self.session.post(url, json=payload)
         if not response.ok:
+            try:
+                detail = response.json()
+            except ValueError:
+                detail = response.text
             raise RuntimeError(
                 f"Error sending status for vehicle {vehicle_id}. "
-                f"Status code {response.status_code}"
+                f"Status code {response.status_code}: {detail}"
             )
 
 
@@ -114,12 +118,15 @@ class FmsService:
                 self.logger.error("Error syncing vehicle %s: %s", d_id, exc)
 
     def _convert_status(self, divera_status: Dict) -> ConnectStatus:
-        ts = datetime.datetime.utcfromtimestamp(divera_status['status_ts']).isoformat()
+        utc_ts = datetime.datetime.fromtimestamp(
+            divera_status['status_ts'], tz=datetime.timezone.utc
+        )
+        ts = utc_ts.astimezone().isoformat()
         return ConnectStatus(
             Status=divera_status['status'],
             Position=Position(divera_status['lat'], divera_status['lng']),
             StatusTimestamp=ts,
-            PositionTimestamp=datetime.datetime.now().isoformat(),
+            PositionTimestamp=datetime.datetime.now().astimezone().isoformat(),
         )
 
 
@@ -158,6 +165,7 @@ def main() -> None:
     logger.info("Starting sync loop with interval %s seconds", interval)
     while True:
         time.sleep(interval)
+        logger.info("Running sync cycle")
         service.sync()
 
 
